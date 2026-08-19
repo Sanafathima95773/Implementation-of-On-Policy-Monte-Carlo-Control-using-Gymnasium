@@ -30,10 +30,20 @@ pip install gymnasium numpy matplotlib
 ---
 
 ## Environment Description
+```
+FrozenLake-v1 is a simple Reinforcement Learning environment provided by Gymnasium.
 
+It has a 4 × 4 grid, so there are 16 states.
+The agent starts from the Start (S) position.
+F represents a safe frozen tile.
+H represents a hole. If the agent falls into a hole, the episode ends.
+G represents the goal.
+The agent has 4 actions: Left, Down, Right, and Up.
+The agent gets a reward of 1 when it reaches the goal.
+Otherwise, the reward is 0.
+In this program, is_slippery=False is used, so the agent moves in the direction it selects without slipping.
 
-
-
+```
 
 
 
@@ -99,46 +109,20 @@ $$
 ---
 
 ## Algorithm
-Create the FrozenLake-v1 environment with is_slippery=False, so the environment is deterministic.
-Initialize a Q-table with zeros.
-FrozenLake has 16 states.
-There are 4 actions: Left (L), Down (D), Right (R), Up (U).
-Start with epsilon = 1.0, meaning the agent initially explores randomly.
-Generate an episode using the epsilon-greedy policy.
-Store (state, action, reward) for every step.
-
-Traverse the episode backwards and calculate the return:
-
-G
-t
-	​
-
-=R
-t+1
-	​
-
-+γG
-t+1
-	​
-
-
-Update the Q-value using:
-
-Q(s,a)←Q(s,a)+α[G−Q(s,a)]
-Gradually decrease epsilon from 1.0 toward 0.05, reducing exploration and increasing exploitation.
-
-After 1500 episodes, select the action with the highest Q-value for each state:
-
-optimal_policy = np.argmax(Q, axis=1)
-
-Calculate the state-value function using:
-
-V(s) = max Q(s,a)
-11. Plot the moving average of rewards to observe the learning progress.
+STEP 1: Initialize the FrozenLake environment, Q-table, and parameters such as learning rate, discount factor, and epsilon.    
+STEP 2: Generate a complete episode using the epsilon-greedy policy by selecting actions through exploration and exploitation.   
+STEP 3: Store the states, actions, and rewards obtained during the episode.  
+STEP 4: Calculate the return (G) by traversing the episode backwards using G=R+γG.   
+STEP 5: Update the Q-values using Q(s,a)←Q(s,a)+α[G−Q(s,a)], and reduce epsilon after each episode.   
+STEP 6: Repeat for 20,000 episodes, then select the highest Q-value action as the final policy and evaluate it using the average reward and learning curve.  
 
 
 ## Python Program
-```
+
+
+
+```python
+
 import gymnasium as gym
 import numpy as np
 import matplotlib.pyplot as plt
@@ -155,7 +139,7 @@ env = gym.make("FrozenLake-v1", is_slippery=False)
 n_states = env.observation_space.n
 n_actions = env.action_space.n
 
-num_episodes = 1500
+num_episodes = 20000
 gamma = 0.99
 alpha = 0.1
 
@@ -296,47 +280,60 @@ plt.grid(True)
 plt.show()
 
 env.close()
+
 ```
+
+
+
 ## Output
 
-Final Q-table:
-<img width="522" height="410" alt="image" src="https://github.com/user-attachments/assets/9430b337-e2e3-4de7-9680-34cc316ca711" />
+
+### Final Q-table:
+<img width="240" height="265" alt="image" src="https://github.com/user-attachments/assets/1a5ca3fb-2a9a-438e-8200-adf7c0111762" />
+
+
+#### FOR EPISODE 1500
+<img width="365" height="420" alt="image" src="https://github.com/user-attachments/assets/0cad461f-4de8-4cb4-ae2c-f91939994e07" />
 
 
 
-Estimated State-Value Function:
-<img width="405" height="187" alt="image" src="https://github.com/user-attachments/assets/54ff9151-4343-4b44-beba-4b8ebf4efb93" />
+### Estimated State-Value Function:
+<img width="390" height="110" alt="image" src="https://github.com/user-attachments/assets/485f3a29-0bb4-4313-a84f-6f70c2d24fe4" />
 
 
-Learned Policy:
-<img width="528" height="175" alt="image" src="https://github.com/user-attachments/assets/7ab1070a-8748-4515-b741-da3e0bdc465f" />
 
-<img width="1045" height="580" alt="image" src="https://github.com/user-attachments/assets/ed75298e-ff2e-4cd5-9093-3f361152e74f" />
+#### FOR EPISODE 1500
+
+<img width="360" height="125" alt="image" src="https://github.com/user-attachments/assets/be9c374c-fa2d-4948-b050-026d6b9d2cfb" />
+
+
+
+
+### Learned Policy:
+<img width="189" height="78" alt="image" src="https://github.com/user-attachments/assets/ec88a584-30e8-4023-9a19-f70e5d3d0a3e" />
+
+#### FOR EPISODE 1500
+<img width="213" height="86" alt="image" src="https://github.com/user-attachments/assets/ae060fe8-239d-4f8b-ba68-5bd844bf149a" />
+
+
+### Average reward over last 1000 episodes: 
+
+
+<img width="632" height="421" alt="image" src="https://github.com/user-attachments/assets/b08dd966-ca58-44a8-8c36-14eb75f405af" />
+
+#### FOR EPISODE 1500
+<img width="689" height="456" alt="image" src="https://github.com/user-attachments/assets/8c7453be-ac37-419c-b986-8d0566803893" />
 
 ## Result
-```text
-The final output will contain:
 
-Final Q-table: learned Q-values for all 16 states and 4 actions.
-Estimated State-Value Function: highest Q-value for each state.
-Learned Policy: an action (L, D, R, or U) for each state.
-Average reward over the last 1000 episodes: indicates how often the agent successfully reaches the goal.
-Learning curve: shows whether the agent's performance improves over training.
+The Monte Carlo Control algorithm successfully learned an improved policy for the FrozenLake environment. The Q-table was updated using returns from complete episodes, and the agent learned actions that help it reach the goal while avoiding holes.
 
-Because is_slippery=False, the agent can learn a reliable path to the goal. The learned policy should generally direct the agent around the holes and toward the goal.
-```
----
 
 ## Inference
-```text
+Increasing the number of episodes gives the Monte Carlo agent more experience. Therefore, 20,000 episodes generally provide better learning than 1,500 episodes, although the exact results can vary because the algorithm uses random exploration.
 
-The Monte Carlo Control algorithm successfully learns an optimal or near-optimal policy by repeatedly generating complete episodes and updating the Q-values using the returns obtained from those episodes. Initially, the agent explores many actions because epsilon is high. As training progresses, epsilon decreases, causing the agent to increasingly choose actions with higher Q-values.
 
-The learning curve should show an improvement in the average reward as the number of episodes increases. A higher average reward in the last 1000 episodes indicates that the agent has learned to reach the goal more consistently.
 
-Important: the exact Q-table and average reward are dependent on the random seed, so your numerical output may differ each time you run the code. Also, because this is Monte Carlo learning with only 1500 episodes, the Q-values may not be perfectly converged.
-
-```
 
 
 
