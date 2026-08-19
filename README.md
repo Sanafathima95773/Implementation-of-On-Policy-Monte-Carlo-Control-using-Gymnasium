@@ -309,7 +309,6 @@ Estimated State-Value Function:
 
 
 Learned Policy:
-
 <img width="528" height="175" alt="image" src="https://github.com/user-attachments/assets/7ab1070a-8748-4515-b741-da3e0bdc465f" />
 
 <img width="1045" height="580" alt="image" src="https://github.com/user-attachments/assets/ed75298e-ff2e-4cd5-9093-3f361152e74f" />
