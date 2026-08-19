@@ -304,14 +304,8 @@ Final Q-table:
 
 
 
-
 Estimated State-Value Function:
 <img width="405" height="187" alt="image" src="https://github.com/user-attachments/assets/54ff9151-4343-4b44-beba-4b8ebf4efb93" />
-
-
-
-
-
 
 
 Learned Policy:
@@ -349,5 +343,4 @@ Important: the exact Q-table and average reward are dependent on the random seed
 
 
 
----
 
